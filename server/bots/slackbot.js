@@ -1,10 +1,8 @@
-import {WebClient} from "@slack/web-api";
-import {createEventAdapter} from "@slack/events-api";
-import {Bot, User, Channel} from "./bot.js";
+import { WebClient } from "@slack/web-api";
+import { RTMClient } from "@slack/rtm-api";
+import { Bot, User, Channel } from "./bot.js";
 
-const SLACK_PORT = 3000;
-
-export function SlackBot(events, token, signing_secret) {
+export function SlackBot(events, token) {
     Bot.call(this, events, token, "Slack");
 
     this.send_message_to_channel = function (content, channel) {
@@ -42,12 +40,12 @@ export function SlackBot(events, token, signing_secret) {
 
     this.start = function () {
         this.client = new WebClient(this.token);
-        const eventapi = createEventAdapter(signing_secret);
+        this.rtm = new RTMClient(this.token);
 
-        eventapi.on("message", event => this._handle_message(event));
+        this.rtm.on("message", e => this._handle_message(e));
 
-        (async() => {
-            await eventapi.start(SLACK_PORT);
+        (async () => {
+            const { self, team } = await this.rtm.start();
             this.handle_ready();
         })();
     };

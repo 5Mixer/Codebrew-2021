@@ -11,6 +11,8 @@ export function User(id, send) {
 }
 
 export function Channel(id, send) {
+    // TODO add channel name, tostring method
+
     this.id = id;
     this.send = send;
     
