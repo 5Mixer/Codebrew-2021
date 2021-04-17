@@ -8,7 +8,7 @@ Blockly.Blocks['on_message'] = {
     this.setOutput(false);
     
     this.setColour(160);
-    this.setTooltip('Send a message');
+    this.setTooltip('Triggers when the bot receives a message from any channel or user');
 
   }
 };
