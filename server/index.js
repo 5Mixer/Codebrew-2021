@@ -9,7 +9,10 @@ const requiresAuth = OpenID.default.requiresAuth;
 
 const app = express();
 
-mongoose.connect(process.env.MONGODB_URL || 'mongodb://localhost/amazona', {
+app.use(express.urlencoded({extended:true}))
+app.use(express.json())
+
+mongoose.connect(process.env.MONGODB_URL || 'mongodb://localhost/mongodblock', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
@@ -27,7 +30,8 @@ const config = {
 app.use(auth(config));
 
 app.post("/api/createBot", (req, res) => {
-  res.send("This is the api for creating bots");
+  console.log(req.body);
+  res.status(200).end();
 });
 
 app.use('api/blocklys', blocklyRouter)
@@ -48,7 +52,7 @@ app.use((err, req, res, next) => {
   res.status(500).send({ message: err.message });
 });
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5005;
 
 app.listen(port, () => {
   console.log(`Serve at http://localhost:${port}`);
