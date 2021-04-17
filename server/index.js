@@ -12,7 +12,8 @@ mongoose.connect(process.env.MONGODB_URL || 'mongodb://localhost/amazona', {
 });
 
 app.post("/api/createBot", (req, res) => {
-  res.send("This is the api for creating bots");
+  console.log(res.body);
+  res.send(res.body);
 });
 
 app.use('api/blocklys', blocklyRouter)
