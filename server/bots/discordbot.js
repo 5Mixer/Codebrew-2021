@@ -1,22 +1,22 @@
-const Discord = require("discord.js");
-const bot = require("./bot.js");
+import Discord from "discord.js";
+import {Bot, User, Channel} from "./bot.js";
 
-function DiscordBot(events, token) {
-    bot.Bot.call(this, events, token);
+export function DiscordBot(events, token) {
+    Bot.call(this, events, token);
 
     this.get_content = function (event) {
         return event.content;
     };
 
     this.get_user = function (event) {
-        return new bot.User(
+        return new User(
             event.author.id,
             c => event.author.send(c)
         );
     };
 
     this.get_channel = function (event) {
-        return new bot.Channel(
+        return new Channel(
             event.channel.id,
             c => event.channel.send(c)
         );
@@ -38,4 +38,4 @@ function DiscordBot(events, token) {
     };
 }
 
-module.exports = DiscordBot;
+export default DiscordBot;

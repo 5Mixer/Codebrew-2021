@@ -1,11 +1,11 @@
-const { WebClient } = require("@slack/web-api");
-const { createEventAdapter } = require("@slack/events-api");
-const bot = require("./bot.js");
+import {WebClient} from "@slack/web-api";
+import {createEventAdapter} from "@slack/events-api";
+import {Bot, User, Channel} from "./bot.js";
 
 const SLACK_PORT = 3000;
 
-function SlackBot(events, token, signing_secret) {
-    bot.Bot.call(this, events, token);
+export function SlackBot(events, token, signing_secret) {
+    Bot.call(this, events, token);
 
     this.send_message_to_channel = function (content, channel) {
         (async () => {
@@ -24,11 +24,11 @@ function SlackBot(events, token, signing_secret) {
     };
 
     this.get_user = function(event) {
-        return new bot.User(event.user);
+        return new User(event.user);
     };
 
     this.get_channel = function(event) {
-        return new bot.Channel(
+        return new Channel(
             event.channel,
             c => this.send_message_to_channel(c, event.channel)
         );
@@ -53,4 +53,4 @@ function SlackBot(events, token, signing_secret) {
     };
 }
 
-module.exports = SlackBot;
+export default SlackBot;

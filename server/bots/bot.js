@@ -1,22 +1,23 @@
 // Supported events:
-//  - onmessage(content: str, author: User, channel: Channel, message_id: str)
-//  - onready()
+//  - onmessage(message)
+//  - onreaction(reaction)
+//  - onready(info)
 
-function User(id, send) {
+export function User(id, send) {
     this.id = id;
     this.send = send;
 
     return this;
 }
 
-function Channel(id, send) {
+export function Channel(id, send) {
     this.id = id;
     this.send = send;
     
     return this;
 }
 
-function Message(content, author, channel) {
+export function Message(content, author, channel) {
     this.content = content;
     this.author = author;
     this.channel = channel;
@@ -24,7 +25,16 @@ function Message(content, author, channel) {
     return this;
 }
 
-function Bot(events, token) {
+export function Reaction(message, emoji, user, count) {
+    this.message = message;
+    this.emoji = emoji;
+    this.user = user;
+    this.count = count;
+
+    return this;
+}
+
+export function Bot(events, token) {
     this.events = events;
     this.token = token;
 
@@ -47,7 +57,7 @@ function Bot(events, token) {
     };
 
     this.get_message = function (event) {
-        // Get a message object from an event received by this bot.
+        // Get a Message object from an event received by this bot.
 
         return new Message(
             this.get_content(event),
@@ -56,9 +66,13 @@ function Bot(events, token) {
         );
     };
 
-    this.handle_message = function (event) {
-        console.log(event);
+    this.get_reaction = function (event) {
+        // Get a Reaction object from an event received by this bot.
 
+        return new Reaction(new Message(event), null, null, null);
+    }
+
+    this.handle_message = function (event) {
         if (this.events.onmessage) {
             this.events.onmessage(this.get_message(event));
         }
@@ -70,8 +84,3 @@ function Bot(events, token) {
         throw new TypeError("Abstract Bot start method not implemented.");
     };
 }
-
-exports.User = User
-exports.Channel = Channel
-exports.Message = Message
-exports.Bot = Bot
