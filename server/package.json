@@ -5,7 +5,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --watch backend --exec node --experimental-modules server/index.js"
+    "start": "nodemon --watch . --exec node --experimental-modules index.js"
   },
   "repository": {
     "type": "git",
@@ -21,7 +21,11 @@
     "@slack/events-api": "^3.0.0",
     "@slack/web-api": "^6.1.0",
     "discord.js": "^12.5.3",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "express-async-handler": "^1.1.4",
+    "mongod": "^2.0.0",
+    "mongodb": "^3.6.6",
+    "mongoose": "^5.12.4"
   },
   "devDependencies": {
     "nodemon": "^2.0.7"
