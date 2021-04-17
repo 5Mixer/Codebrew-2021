@@ -2,12 +2,15 @@ import express from "express";
 import mongoose from "mongoose";
 import blocklyRouter from "./routers/blocklyRouter.js"
 import * as OpenID from 'express-openid-connect';
+import cors from "cors"
 
 const auth = OpenID.auth;
 const requiresAuth = OpenID.default.requiresAuth;
 // console.log(Object.keys(OpenID.default));
 
 const app = express();
+
+app.use(cors({ origin: "http://localhost:3000"}))
 
 app.use(express.urlencoded({extended:true}))
 app.use(express.json())
