@@ -3,8 +3,8 @@ import * as Blockly from 'blockly/core';
 Blockly.Blocks['send_message'] = {
   init: function() {
     this.appendDummyInput().appendField('send message');
-    this.appendValueInput('message_to').appendField('to');
-    this.appendValueInput('message_contents').appendField('contents');
+    this.appendValueInput('message_to').appendField('to').setCheck('Messagable');
+    this.appendValueInput('message_contents').appendField('contents').setCheck('String');
     this.setOutput(false);
     
     this.setPreviousStatement(true, null);

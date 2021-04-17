@@ -3,10 +3,10 @@ import * as Blockly from 'blockly/core';
 Blockly.Blocks['author_field'] = {
   init: function() {
     // this.appendField('author')
-    this.appendDummyInput('author').appendField('author');
-    this.setOutput(true, 'string');
+    this.appendDummyInput().appendField('author');
+    this.setOutput(true, ['Messagable', 'String']);
     
-    this.setColour(160);
+    this.setColour(130);
     this.setTooltip('The author of a received message');
   }
 };
