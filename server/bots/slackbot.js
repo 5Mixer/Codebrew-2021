@@ -44,7 +44,6 @@ function SlackBot(events, token, signing_secret) {
         this.client = new WebClient(this.token);
         const eventapi = createEventAdapter(signing_secret);
 
-
         eventapi.on("message", event => this._handle_message(event));
 
         (async() => {

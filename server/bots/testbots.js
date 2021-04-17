@@ -28,6 +28,3 @@ const slack = new SlackBot(events, SLACK_TOKEN, SLACK_SIGNING_SECRET);
 
 discord.start();
 slack.start();
-
-// exports.DiscordBot = DiscordBot;
-// exports.SlackBot = SlackBot;
