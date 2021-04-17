@@ -1,4 +1,4 @@
-var toolbox ={
+export var toolbox = {
     contents: [
         {
             kind: 'category',
