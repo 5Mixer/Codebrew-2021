@@ -9,8 +9,10 @@ export function DiscordBot(events, token) {
     };
 
     this.get_user = function (event) {
+        console.log(event.author);
         return new User(
             event.author.id,
+            event.author.username,
             c => event.author.send(c)
         );
     };
@@ -18,6 +20,7 @@ export function DiscordBot(events, token) {
     this.get_channel = function (event) {
         return new Channel(
             event.channel.id,
+            event.channel.name,
             c => event.channel.send(c)
         );
     };

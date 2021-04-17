@@ -3,17 +3,23 @@
 //  - onreaction(reaction)
 //  - onready(info)
 
-export function User(id, send) {
+export function User(id, name, send) {
     this.id = id;
+    this.name = name;
     this.send = send;
+
+    this.toString = function () {
+        return this.name;
+    };
 
     return this;
 }
 
-export function Channel(id, send) {
+export function Channel(id, name, send) {
     // TODO add channel name, tostring method
 
     this.id = id;
+    this.name = name;
     this.send = send;
     
     return this;
