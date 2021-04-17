@@ -46,6 +46,9 @@ app.get("/", (req, res) => {
 
 app.get('/profile', requiresAuth(), (req, res) => {
   res.send(JSON.stringify(req.oidc.user));
+  // User information to stdout
+  console.log(req.oidc.user);
+
 });
 
 app.use((err, req, res, next) => {
