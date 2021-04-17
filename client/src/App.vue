@@ -15,6 +15,7 @@
 import BlocklyComponent from './components/BlocklyComponent.vue'
 import './blocks/on_message';
 import './blocks/on_react';
+import './blocks/add_react';
 import './blocks/send_message';
 import './blocks/reacter_field';
 import './blocks/author_field';

@@ -21,6 +21,10 @@ export var toolbox = {
                 },
                 {
                     kind: "block",
+                    type: "add_react"
+                },
+                {
+                    kind: "block",
                     type: "author_field"
                 },
                 {
