@@ -2,7 +2,6 @@
   "dependencies": {
     "@slack/events-api": "^3.0.0",
     "@slack/web-api": "^6.1.0",
-    "blockly": "^5.20210325.1",
-    "react-blockly": "^6.0.1"
+    "discord.js": "^12.5.3"
   }
 }
