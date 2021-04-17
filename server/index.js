@@ -1,6 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import blocklyRouter from "./routers/blocklyRouter.js"
+import { auth } from 'express-openid-connect';
 
 
 const app = express();
@@ -11,6 +12,17 @@ mongoose.connect(process.env.MONGODB_URL || 'mongodb://localhost/amazona', {
   useCreateIndex: true,
 });
 
+// For Auth0
+const config = {
+  authRequired: false,
+  auth0Logout: true,
+  secret: 'a long, randomly-generated string stored in env',
+  baseURL: 'http://localhost:5000',
+  clientID: 'MvHq02XcmjKfNPek1K6jEQDvi0CTUa3U',
+  issuerBaseURL: 'https://dev-aakwu9bc.au.auth0.com'
+};
+app.use(auth(config));
+
 app.post("/api/createBot", (req, res) => {
   res.send("This is the api for creating bots");
 });
@@ -18,7 +30,8 @@ app.post("/api/createBot", (req, res) => {
 app.use('api/blocklys', blocklyRouter)
 
 app.get("/", (req, res) => {
-  res.send("Server is Running");
+  // res.send("Server is Running");
+  res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
 });
 
 app.use((err, req, res, next) => {
