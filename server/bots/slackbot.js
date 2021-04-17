@@ -1,11 +1,11 @@
-import {WebClient} from "@slack/web-api";
-import {createEventAdapter} from "@slack/events-api";
-import {Bot, User, Channel} from "./bot.js";
+import { WebClient } from "@slack/web-api";
+import { RTMClient } from "@slack/rtm-api";
+import { Bot, User, Channel, ReactedMessage } from "./bot.js";
 
-const SLACK_PORT = 3000;
-
-export function SlackBot(events, token, signing_secret) {
+export function SlackBot(events, token) {
     Bot.call(this, events, token, "Slack");
+    this.channels = [];
+    this.users = [];
 
     this.send_message_to_channel = function (content, channel) {
         (async () => {
@@ -19,35 +19,102 @@ export function SlackBot(events, token, signing_secret) {
         })();
     };
 
-    this.get_content = function(event) {
+    this.update_channel_list = function () {
+        (async () => {
+            try {
+                this.channels = (
+                    await this.client.conversations.list()
+                ).channels;
+            }
+            catch {
+
+            }
+        })();
+    };
+
+    this.update_user_list = function () {
+        (async () => {
+            try {
+                this.users = (
+                    await this.client.users.list()
+                ).members;
+            }
+            catch {
+
+            }
+        })();
+    };
+
+    this.get_content = function (event) {
         return event.text;
     };
 
-    this.get_user = function(event) {
-        return new User(event.user);
-    };
+    this.get_user = function (event) {
+        let user_name;
+        
+        let match = this.users.filter(u => u.id === event.user);
+        if (match.length === 0) {
+            this.update_user_list()
+            user_name = "";
+        }
+        else {
+            user_name = match[0].name; 
+        }
 
-    this.get_channel = function(event) {
-        return new Channel(
-            event.channel,
-            c => this.send_message_to_channel(c, event.channel)
+        return new User(
+            event.user,
+            user_name,
+            c => this.send_message_to_channel(String(c), event.user)
         );
     };
 
-    this._handle_message = function(event) {
+    this.get_channel = function (event) {
+        let channel_name;
+        
+        let match = this.channels.filter(c => c.id === event.channel);
+        if (match.length === 0) {
+            this.update_channel_list()
+            channel_name = "";
+        }
+        else {
+            channel_name = match[0].name; 
+        }
+
+        return new Channel(
+            event.channel,
+            channel_name,
+            c => this.send_message_to_channel(String(c), event.channel)
+        );
+    };
+
+    this.get_reacted_message = function (event) {
+        return new ReactedMessage(null, event.reaction, this.get_user(event));
+    };
+
+    this._handle_message = function (event) {
         if (event.bot_profile === undefined) {
             this.handle_message(event);
         }
-    }
+    };
+
+    this._handle_reaction = function (event) {
+        if (event.bot_profile === undefined) {
+            this.handle_reaction(event);
+        }
+    };
 
     this.start = function () {
         this.client = new WebClient(this.token);
-        const eventapi = createEventAdapter(signing_secret);
+        this.rtm = new RTMClient(this.token);
 
-        eventapi.on("message", event => this._handle_message(event));
+        this.update_channel_list();
+        this.update_user_list();
 
-        (async() => {
-            await eventapi.start(SLACK_PORT);
+        this.rtm.on("message", e => this._handle_message(e));
+        this.rtm.on("reaction_added", e => this.handle_reaction(e));
+
+        (async () => {
+            const { self, team } = await this.rtm.start();
             this.handle_ready();
         })();
     };

@@ -9,11 +9,19 @@ export var toolbox = {
             contents: [
                 {
                     kind: "block",
+                    type: "on_message"
+                },
+                {
+                    kind: "block",
+                    type: "on_react"
+                },
+                {
+                    kind: "block",
                     type: "send_message"
                 },
                 {
                     kind: "block",
-                    type: "on_message"
+                    type: "add_react"
                 },
                 {
                     kind: "block",
@@ -21,7 +29,19 @@ export var toolbox = {
                 },
                 {
                     kind: "block",
+                    type: "reacter_field"
+                },
+                {
+                    kind: "block",
                     type: "channel_field"
+                },
+                {
+                    kind: "block",
+                    type: "content_field"
+                },
+                {
+                    kind: "block",
+                    type: "emoji_field"
                 }
             ]
         },

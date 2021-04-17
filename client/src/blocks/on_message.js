@@ -3,12 +3,12 @@ import * as Blockly from 'blockly/core';
 Blockly.Blocks['on_message'] = {
   init: function() {
     // this.appendField('author')
-    this.appendDummyInput('message_value').appendField('on message');
+    this.appendDummyInput().appendField('on message');
     this.appendStatementInput('on_message_handler');
     this.setOutput(false);
     
     this.setColour(160);
-    this.setTooltip('Send a message');
+    this.setTooltip('Triggers when the bot receives a message from any channel or user');
 
   }
 };
