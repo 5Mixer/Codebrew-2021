@@ -1,8 +1,11 @@
 import express from "express";
 import mongoose from "mongoose";
 import blocklyRouter from "./routers/blocklyRouter.js"
-import { auth } from 'express-openid-connect';
+import * as OpenID from 'express-openid-connect';
 
+const auth = OpenID.auth;
+const requiresAuth = OpenID.default.requiresAuth;
+// console.log(Object.keys(OpenID.default));
 
 const app = express();
 
@@ -32,6 +35,10 @@ app.use('api/blocklys', blocklyRouter)
 app.get("/", (req, res) => {
   // res.send("Server is Running");
   res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
+});
+
+app.get('/profile', requiresAuth(), (req, res) => {
+  res.send(JSON.stringify(req.oidc.user));
 });
 
 app.use((err, req, res, next) => {
