@@ -24,7 +24,8 @@ const config = {
 app.use(auth(config));
 
 app.post("/api/createBot", (req, res) => {
-  res.send("This is the api for creating bots");
+  console.log(res.body);
+  res.send(res.body);
 });
 
 app.use('api/blocklys', blocklyRouter)
