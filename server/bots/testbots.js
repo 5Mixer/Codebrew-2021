@@ -4,6 +4,8 @@ import DiscordBot from "./discordbot.js";
 "use strict";
 
 // For a discord bot, we just need to have the token
+//
+// the onreaction event on discord doesn't seem to work.
 const DISCORD_TOKEN = 
     "ODMyNzg1OTE3NTg3NjE5ODQy.YHo2Uw.aih_cwH8anSxPfJsQK_CSJlSIrw";
 
@@ -16,11 +18,12 @@ const SLACK_TOKEN = "xoxb-1973452657939-1973244987282-TnaXL7iTXby6peBT4w4HwAQ0";
 const SLACK_SIGNING_SECRET = "0c78b2ba8c3b9f328e531483c5faa88d";
 
 let events = {
-    onmessage: msg => {
-        console.log(msg.content);
-        msg.channel.send(msg.content);
+    onmessage: (user, content, channel) => {
+        console.log(content);
+        channel.send(content);
     },
-    onready: () => console.log(`Logged in!`)
+    onready: i => console.log(`Logged in as ${i}!`),
+    onreaction: e => console.log(e)
 };
 
 const discord = new DiscordBot(events, DISCORD_TOKEN);

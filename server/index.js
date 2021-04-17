@@ -2,7 +2,8 @@ import express from "express";
 import mongoose from "mongoose";
 import blocklyRouter from "./routers/blocklyRouter.js"
 import * as OpenID from 'express-openid-connect';
-import cors from "cors"
+import cors from "cors";
+import {handle_bot_upload} from "./bots/handle_upload.js";
 
 const auth = OpenID.auth;
 const requiresAuth = OpenID.default.requiresAuth;
@@ -15,11 +16,11 @@ app.use(cors({ origin: "http://localhost:3000"}))
 app.use(express.urlencoded({extended:true}))
 app.use(express.json())
 
-mongoose.connect(process.env.MONGODB_URL || 'mongodb://localhost/mongodblock', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useCreateIndex: true,
-});
+// mongoose.connect(process.env.MONGODB_URL || 'mongodb://localhost/mongodblock', {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+//   useCreateIndex: true,
+// });
 
 // For Auth0
 const config = {
@@ -33,7 +34,7 @@ const config = {
 app.use(auth(config));
 
 app.post("/api/createBot", (req, res) => {
-  console.log(req.body);
+  handle_bot_upload(req.body);
   res.status(200).end();
 });
 
