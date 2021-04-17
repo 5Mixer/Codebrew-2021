@@ -19,7 +19,7 @@ mongoose.connect(process.env.MONGODB_URL || 'mongodb://localhost/amazona', {
 const config = {
   authRequired: false,
   auth0Logout: true,
-  secret: 'a long, randomly-generated string stored in env',
+  secret: '38snkfskfnjkjfnkfniwu4rwfnskfdnskjfn3iu4fkfnskfnskjdfnskfdnsdkf',
   baseURL: 'http://localhost:5000',
   clientID: 'MvHq02XcmjKfNPek1K6jEQDvi0CTUa3U',
   issuerBaseURL: 'https://dev-aakwu9bc.au.auth0.com'
