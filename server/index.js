@@ -34,7 +34,10 @@ const config = {
 app.use(auth(config));
 
 app.post("/api/createBot", (req, res) => {
-  handle_bot_upload(req.body);
+  // array contains new bot objects created by the function
+  // TODO: manage these
+  new_bots = handle_bot_upload(req.body);
+
   res.status(200).end();
 });
 
