@@ -3,14 +3,11 @@ import DiscordBot from "./discordbot.js";
 
 const DISCORD_TOKEN = 
     "ODMyNzg1OTE3NTg3NjE5ODQy.YHo2Uw.aih_cwH8anSxPfJsQK_CSJlSIrw";
-
-const SLACK_TOKEN = "xoxb-1973452657939-1973244987282-TnaXL7iTXby6peBT4w4HwAQ0";
-const SLACK_SIGNING_SECRET = "0c78b2ba8c3b9f328e531483c5faa88d";
+const SLACK_TOKEN = "xoxb-1973452657939-1973888738739-aOoOZVh1p65qPGgR977CuMZZ";
 
 export function handle_bot_upload(body) {
     body.discord_token = DISCORD_TOKEN;
     body.slack_token = SLACK_TOKEN;
-    body.slack_signing_secret = SLACK_SIGNING_SECRET;
 
     let events = {};
 
@@ -23,18 +20,26 @@ export function handle_bot_upload(body) {
 
     let new_bots = [];
 
-    if (body.discord_token) {
-        const discord_bot = new DiscordBot(events, DISCORD_TOKEN);
-        discord_bot.start();
-        new_bots.append(discord_bot);
+    try {
+        if (body.discord_token) {
+            const discord_bot = new DiscordBot(events, DISCORD_TOKEN);
+            discord_bot.start();
+            new_bots.push(discord_bot);
+        }
+    }
+    catch (error) {
+        console.log(`Error when creating Discord bot: ${error}`);
     }
 
-    if (body.slack_token && body.slack_signing_secret) {
-        const slack_bot = new SlackBot(
-            events, SLACK_TOKEN, SLACK_SIGNING_SECRET
-        );
-        slack_bot.start();
-        new_bots.append(slack_bot);
+    try {
+        if (body.slack_token) {
+            const slack_bot = new SlackBot(events, SLACK_TOKEN);
+            slack_bot.start();
+            new_bots.push(slack_bot);
+        }    
+    }
+    catch (error) {
+        console.log(`Error when creating Slack bot: ${error}`);
     }
 
     return new_bots;
