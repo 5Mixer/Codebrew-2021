@@ -23,7 +23,7 @@ const config = {
   authRequired: false,
   auth0Logout: true,
   secret: '38snkfskfnjkjfnkfniwu4rwfnskfdnskjfn3iu4fkfnskfnskjdfnskfdnsdkf',
-  baseURL: 'http://localhost:5000',
+  baseURL: 'http://localhost:5005',
   clientID: 'MvHq02XcmjKfNPek1K6jEQDvi0CTUa3U',
   issuerBaseURL: 'https://dev-aakwu9bc.au.auth0.com'
 };
@@ -52,6 +52,7 @@ app.use((err, req, res, next) => {
   res.status(500).send({ message: err.message });
 });
 
+// If someone change port please let Peter know.
 const port = process.env.PORT || 5005;
 
 app.listen(port, () => {
