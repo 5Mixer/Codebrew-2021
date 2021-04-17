@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "blockly": "^5.20210325.1",
+    "blocky": "^0.0.1"
+  }
+}

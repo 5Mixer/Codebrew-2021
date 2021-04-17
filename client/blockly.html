@@ -1,28 +1,31 @@
 <!DOCTYPE html>
+<html>
 <head>
-<script src="node_modules/blockly/blockly_compressed.js"></script>
-<script src="node_modules/blockly/blocks_compressed.js"></script>
-<script src="node_modules/blockly/javascript_compressed.js"></script>
-<script src="node_modules/blockly/msg/en.js"></script>
-<script src="custom_blocks.js"></script>
-<xml id="toolbox" style="display: none">
-    <block type="string_length"></block>
-    <block type="controls_if"></block>
-    <block type="controls_repeat_ext"></block>
-    <block type="logic_compare"></block>
-    <block type="math_number"></block>
-    <block type="math_arithmetic"></block>
-    <block type="text"></block>
-    <block type="text_print"></block>
-  </xml>
+    <meta charset="utf-8">
+    <title>Block based bot editor</title>
+    <link rel="stylesheet" href="style/main.css">
+    
 </head>
 <body>
-    <div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
-    <script>
-        var workspace = Blockly.inject('blocklyDiv',
-            {toolbox: document.getElementById('toolbox')});
-        workspace.addChangeListener(() => console.log(
-            Blockly.JavaScript.workspaceToCode(workspace))
-        );
-    </script>
+    <table>
+        <tr>
+            <td>
+                <h1>Block based bot editor</h1>
+            </td>
+        </tr>
+        <tr>
+            <td id="blocklyArea">
+            </td>
+        </tr>
+    </table>
+    
+    <div id="blocklyDiv" style="position: absolute"></div>
+    
+    <script src="./node_modules/blockly/blockly_compressed.js"></script>
+    <script src="./node_modules/blockly/blocks_compressed.js"></script>
+    <script src="./node_modules/blockly/javascript_compressed.js"></script>
+    <script src="./node_modules/blockly/msg/en.js"></script>
+    <script src="script/toolbox.js"></script>
+    <script src="script/main.js"></script>
 </body>
+</html>
