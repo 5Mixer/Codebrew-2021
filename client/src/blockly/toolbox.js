@@ -22,6 +22,10 @@ export var toolbox = {
                 {
                     kind: "block",
                     type: "channel_field"
+                },
+                {
+                    kind: "block",
+                    type: "content_field"
                 }
             ]
         },

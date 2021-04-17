@@ -3,7 +3,7 @@ import * as Blockly from 'blockly/core';
 Blockly.Blocks['on_message'] = {
   init: function() {
     // this.appendField('author')
-    this.appendDummyInput('message_value').appendField('on message');
+    this.appendDummyInput().appendField('on message');
     this.appendStatementInput('on_message_handler');
     this.setOutput(false);
     
