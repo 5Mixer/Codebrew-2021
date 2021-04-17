@@ -34,7 +34,8 @@ export function Reaction(message, emoji, user, count) {
     return this;
 }
 
-export function Bot(events, token) {
+export function Bot(events, token, type="Abstract") {
+    this.type = type;
     this.events = events;
     this.token = token;
 
@@ -70,11 +71,23 @@ export function Bot(events, token) {
         // Get a Reaction object from an event received by this bot.
 
         return new Reaction(new Message(event), null, null, null);
-    }
+    };
 
     this.handle_message = function (event) {
         if (this.events.onmessage) {
             this.events.onmessage(this.get_message(event));
+        }
+    };
+
+    this.handle_reaction = function (event) {
+        if (this.events.onreaction) {
+            this.events.onreaction(event);
+        }
+    };
+
+    this.handle_ready = function () {
+        if (this.events.onready) {
+            this.events.onready(this.type);
         }
     };
 

@@ -2,7 +2,7 @@ import Discord from "discord.js";
 import {Bot, User, Channel} from "./bot.js";
 
 export function DiscordBot(events, token) {
-    Bot.call(this, events, token);
+    Bot.call(this, events, token, "Discord");
 
     this.get_content = function (event) {
         return event.content;
@@ -22,8 +22,24 @@ export function DiscordBot(events, token) {
         );
     };
 
+    this._handle_reaction = function (message_reaction, user) {
+        console.log(message_reaction, user);
+    };
+
     this.start = function () {
-        let client = new Discord.Client();
+        let client;
+        if (events.onreaction) {
+            client = new Discord.Client({
+                ws: {
+                    intents: new Discord.Intents(Discord.Intents.ALL)
+                }
+            });
+        }
+        else {
+            client = new Discord.Client();
+        }
+
+        client.on("ready", () => this.handle_ready());
         client.on(
             "message",
             e => {
@@ -32,8 +48,16 @@ export function DiscordBot(events, token) {
                 }
             }
         );
-        client.on("ready", this.events.onready);
-        
+        client.on(
+            "messageReactionAdd",
+            (mr, u) => this._handle_reaction(mr, u)
+        );
+        client.on(
+            "messageReactionRemove",
+            (mr, u) => this._handle_reaction(mr, u)
+        );
+        client.on("channelCreate", (c) => console.log("yep", c));
+
         client.login(this.token);
     };
 }

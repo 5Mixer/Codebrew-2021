@@ -5,7 +5,7 @@ import {Bot, User, Channel} from "./bot.js";
 const SLACK_PORT = 3000;
 
 export function SlackBot(events, token, signing_secret) {
-    Bot.call(this, events, token);
+    Bot.call(this, events, token, "Slack");
 
     this.send_message_to_channel = function (content, channel) {
         (async () => {
@@ -48,7 +48,7 @@ export function SlackBot(events, token, signing_secret) {
 
         (async() => {
             await eventapi.start(SLACK_PORT);
-            this.events.onready();
+            this.handle_ready();
         })();
     };
 }
