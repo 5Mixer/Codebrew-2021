@@ -2,7 +2,7 @@
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
   
-    <BlocklyComponent id="blockly2" :options="options" ref="foo"></BlocklyComponent>
+    <BlocklyComponent id="blockly" :options="options" ref="foo"></BlocklyComponent>
     <p id="code">
       <button v-on:click="showCode()">Show JavaScript</button>
       <pre v-html="code"></pre>
@@ -13,7 +13,10 @@
 <script>
 
 import BlocklyComponent from './components/BlocklyComponent.vue'
+import './blocks/on_message';
 import './blocks/send_message';
+import './blocks/author_field';
+import './blocks/channel_field';
 import './prompt';
 import {toolbox} from './blockly/toolbox';
 
@@ -69,7 +72,7 @@ html, body {
   margin: 0;
   background-color: beige;
 }
-#blockly2 {
+#blockly {
   position: absolute;
   left: 0;
   bottom: 0;

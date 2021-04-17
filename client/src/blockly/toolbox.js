@@ -10,6 +10,18 @@ export var toolbox = {
                 {
                     kind: "block",
                     type: "send_message"
+                },
+                {
+                    kind: "block",
+                    type: "on_message"
+                },
+                {
+                    kind: "block",
+                    type: "author_field"
+                },
+                {
+                    kind: "block",
+                    type: "channel_field"
                 }
             ]
         },
