@@ -5,7 +5,7 @@ import blocklyRouter from "./routers/blocklyRouter.js"
 
 const app = express();
 
-mongoose.connect(process.env.MONGODB_URL || 'mongodb://localhost/amazona', {
+mongoose.connect(process.env.MONGODB_URL || 'mongodb://localhost/mongodblock', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
