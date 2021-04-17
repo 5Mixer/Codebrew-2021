@@ -1,5 +1,5 @@
-const SlackBot = require("./slackbot.js");
-const DiscordBot = require("./discordbot.js");
+import SlackBot from "./slackbot.js";
+import DiscordBot from "./discordbot.js";
 
 "use strict";
 
@@ -15,7 +15,7 @@ const DISCORD_TOKEN =
 const SLACK_TOKEN = "xoxb-1973452657939-1973244987282-TnaXL7iTXby6peBT4w4HwAQ0";
 const SLACK_SIGNING_SECRET = "0c78b2ba8c3b9f328e531483c5faa88d";
 
-events = {
+let events = {
     onmessage: msg => {
         console.log(msg.content);
         msg.channel.send(msg.content);
