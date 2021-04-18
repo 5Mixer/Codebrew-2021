@@ -20,6 +20,7 @@ import './blocks/add_react';
 import './blocks/on_new_user';
 import './blocks/send_message';
 import './blocks/reacter_field';
+import './blocks/kick_user';
 import './blocks/author_field';
 import './blocks/channel_field';
 import './blocks/new_user_field';

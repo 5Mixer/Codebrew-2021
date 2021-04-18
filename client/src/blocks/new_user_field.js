@@ -4,7 +4,7 @@ Blockly.Blocks['new_user_field'] = {
   init: function() {
     // this.appendField('author')
     this.appendDummyInput().appendField('new user');
-    this.setOutput(true, ['Messagable', 'String']);
+    this.setOutput(true, ['Messagable', 'String', 'User']);
     
     this.setColour(130);
     this.setTooltip('The person who joined the chat');

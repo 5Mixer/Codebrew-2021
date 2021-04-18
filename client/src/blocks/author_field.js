@@ -4,7 +4,7 @@ Blockly.Blocks['author_field'] = {
   init: function() {
     // this.appendField('author')
     this.appendDummyInput().appendField('author');
-    this.setOutput(true, ['Messagable', 'String']);
+    this.setOutput(true, ['Messagable', 'String', 'User']);
     
     this.setColour(130);
     this.setTooltip('The author of a received message');

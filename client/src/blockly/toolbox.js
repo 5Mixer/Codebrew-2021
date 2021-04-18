@@ -25,6 +25,10 @@ export var toolbox = {
                 },
                 {
                     kind: "block",
+                    type: "kick_user"
+                },
+                {
+                    kind: "block",
                     type: "add_react"
                 },
                 {
