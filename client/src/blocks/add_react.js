@@ -2,9 +2,8 @@ import * as Blockly from 'blockly/core';
 
 Blockly.Blocks['add_react'] = {
   init: function() {
-    this.appendDummyInput().appendField('add react');
     // this.appendValueInput('react_to').appendField('to').setCheck('Message');
-    this.appendValueInput('react_emoji').appendField('emoji').setCheck(['Emoji', 'String']);
+    this.appendValueInput('react_emoji').appendField('add reaction emoji').setCheck(['Emoji', 'String']);
     this.setOutput(false);
     
     this.setPreviousStatement(true, null);

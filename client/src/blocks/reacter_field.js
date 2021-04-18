@@ -4,7 +4,7 @@ Blockly.Blocks['reacter_field'] = {
   init: function() {
     // this.appendField('author')
     this.appendDummyInput().appendField('reacter');
-    this.setOutput(true, ['Messagable', 'String']);
+    this.setOutput(true, ['Messagable', 'User', 'String']);
     
     this.setColour(130);
     this.setTooltip('The person who reacted to a message message');

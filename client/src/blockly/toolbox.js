@@ -17,7 +17,15 @@ export var toolbox = {
                 },
                 {
                     kind: "block",
+                    type: "on_new_user"
+                },
+                {
+                    kind: "block",
                     type: "send_message"
+                },
+                {
+                    kind: "block",
+                    type: "kick_user"
                 },
                 {
                     kind: "block",
@@ -26,6 +34,10 @@ export var toolbox = {
                 {
                     kind: "block",
                     type: "author_field"
+                },
+                {
+                    kind: "block",
+                    type: "new_user_field"
                 },
                 {
                     kind: "block",
