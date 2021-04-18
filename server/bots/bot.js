@@ -3,10 +3,13 @@
 //  - onreaction(reaction)
 //  - onready(info)
 
-export function User(id, name, send) {
+// TODO
+// - react to message block
+
+export function User(id="", name="", send=null) {
     this.id = id;
     this.name = name;
-    this.send = send;
+    this.send = send || (_ => {});
 
     this.toString = function () {
         return this.name;
@@ -27,24 +30,32 @@ export function Channel(id, name, send) {
     return this;
 }
 
-export function Message(content, author, channel) {
+export function Message(content, author, channel, react) {
     this.content = content;
     this.author = author;
     this.channel = channel;
+    this.react = react;
 
     return this;
 }
 
 export function ReactedMessage(message, emoji, reacter) {
     if (message !== null) {
-        Message.call(this, message.content, message.author, message.channel);
+        Message.call(
+            this,
+            message.content,
+            message.author,
+            message.channel,
+            message.react
+        );
     }
     else {
         Message.call(
             this,
             "",
             new User("", "", _ => {}),
-            new Channel("", "", _ => {})
+            new Channel("", "", _ => {}),
+            _ => {}
         );
     }
 
@@ -58,6 +69,8 @@ export function Bot(events, token, type="Abstract") {
     this.type = type;
     this.events = events;
     this.token = token;
+    this.id = null;
+    this.name = null;
 
     this.get_content = function (event) {
         // Get the text content of an event received by this bot.
@@ -77,6 +90,12 @@ export function Bot(events, token, type="Abstract") {
         throw new TypeError("Abstract Bot get_channel method not implemented.");
     };
 
+    this.get_react = function (event) {
+        // Get method to react to a message from an event received by this bot.
+
+        throw new TypeError("Abstract Bot get_react method not implemented.");
+    };
+
     this.get_reacted_message = function (event) {
         // Get the message that was reacted to in a reaction event.
 
@@ -91,7 +110,8 @@ export function Bot(events, token, type="Abstract") {
         return new Message(
             this.get_content(event),
             this.get_user(event),
-            this.get_channel(event)
+            this.get_channel(event),
+            this.get_react(event)
         );
     };
 
@@ -117,5 +137,11 @@ export function Bot(events, token, type="Abstract") {
         // Start this bot listening for events.
 
         throw new TypeError("Abstract Bot start method not implemented.");
+    };
+
+    this.stop = function () {
+        // Stop the bot listening for events.
+
+        throw new TypeError("Abstract Bot stop method not implemented.");
     };
 }

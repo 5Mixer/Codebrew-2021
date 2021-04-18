@@ -31,6 +31,10 @@ export function DiscordBot(events, token) {
         );
     };
 
+    this.get_react = function (event) {
+        return event ? e => event.react(e) : _ => {};
+    };
+
     this.get_reacted_message = function (event) {
         return new ReactedMessage(
             event.message ? this.get_message(event.message) : null,
@@ -59,7 +63,12 @@ export function DiscordBot(events, token) {
             ]
         });
 
-        client.on("ready", () => this.handle_ready());
+        client.on("ready", () => {
+            this.id = client.user.id;
+            this.name = client.user.username;
+
+            this.handle_ready();
+        });
         client.on(
             "message",
             e => {
@@ -72,13 +81,17 @@ export function DiscordBot(events, token) {
             "messageReactionAdd",
             (mr, u) => this._handle_reaction(mr, u)
         );
-        client.on(
-            "messageReactionRemove",
-            (mr, u) => this._handle_reaction(mr, u)
-        );
+        // client.on(
+        //     "messageReactionRemove",
+        //     (mr, u) => this._handle_reaction(mr, u)
+        // );
         // client.on("channelCreate", (c) => console.log("Channel created."));
 
         client.login(this.token);
+    };
+
+    this.stop = function () {
+        this.client.destroy();
     };
 }
 
