@@ -56,6 +56,7 @@ export default {
     handleLogout() {
         localStorage.removeItem("userInfo");
         this.userInfo = {};
+        },
     showAboutModal() {
       this.isAboutModalVisible = true;
     },
