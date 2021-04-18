@@ -58,6 +58,22 @@ export var toolbox = {
             ]
         },
         {
+            kind: 'category',
+            name: 'Networking',
+            id: 'catMessaging',
+            colour: '210',
+            contents: [
+                {
+                    kind: "block",
+                    type: "http_request"
+                },
+                {
+                    kind: "block",
+                    type: "json_access"
+                }
+            ]
+        },
+        {
             kind: 'SEP',
         },
         {
