@@ -16,16 +16,20 @@ import BlocklyComponent from './components/BlocklyComponent.vue'
 import './blocks/on_message';
 import './blocks/on_react';
 import './blocks/add_react';
+import './blocks/on_new_user';
 import './blocks/send_message';
 import './blocks/reacter_field';
 import './blocks/author_field';
 import './blocks/channel_field';
+import './blocks/new_user_field';
 import './blocks/content_field';
 import './blocks/emoji_field';
 import './prompt';
 import {toolbox} from './blockly/toolbox';
 
 import BlocklyJS from 'blockly/javascript';
+
+
 
 async function postData(url = '', data) {
   // Default options are marked with *

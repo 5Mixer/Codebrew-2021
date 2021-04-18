@@ -17,6 +17,10 @@ export var toolbox = {
                 },
                 {
                     kind: "block",
+                    type: "on_new_user"
+                },
+                {
+                    kind: "block",
                     type: "send_message"
                 },
                 {
@@ -26,6 +30,10 @@ export var toolbox = {
                 {
                     kind: "block",
                     type: "author_field"
+                },
+                {
+                    kind: "block",
+                    type: "new_user_field"
                 },
                 {
                     kind: "block",
