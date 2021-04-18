@@ -1,6 +1,6 @@
 import { WebClient } from "@slack/web-api";
 import { RTMClient } from "@slack/rtm-api";
-import { Bot, User, Channel, ReactedMessage } from "./bot.js";
+import { Bot, User, Channel, ReactedMessage, Message } from "./bot.js";
 
 export function SlackBot(events, token) {
     Bot.call(this, events, token, "Slack");
@@ -15,7 +15,20 @@ export function SlackBot(events, token) {
                     channel: channel
                 });
             }
-            catch (error) {}
+            catch {}
+        })();
+    };
+
+    this.add_reaction_to_message = function (emoji, channel, timestamp) {
+        (async () => {
+            try {
+                await this.client.reactions.add({
+                    name: emoji,
+                    channel: channel,
+                    timestamp: timestamp
+                });
+            }
+            catch {}
         })();
     };
 
@@ -26,9 +39,7 @@ export function SlackBot(events, token) {
                     await this.client.conversations.list()
                 ).channels;
             }
-            catch {
-
-            }
+            catch {}
         })();
     };
 
@@ -87,8 +98,21 @@ export function SlackBot(events, token) {
         );
     };
 
+    this.get_react = function (event) {
+        return e => this.add_reaction_to_message(e, event.channel, event.ts);
+    };
+
     this.get_reacted_message = function (event) {
-        return new ReactedMessage(null, event.reaction, this.get_user(event));
+        return new ReactedMessage(
+            new Message(
+                "",
+                new User(),
+                this.get_channel(event.item),
+                this.get_react(event.item)
+            ),
+            event.reaction,
+            this.get_user(event)
+        );
     };
 
     this._handle_message = function (event) {
@@ -98,7 +122,7 @@ export function SlackBot(events, token) {
     };
 
     this._handle_reaction = function (event) {
-        if (event.bot_profile === undefined) {
+        if (event.user !== this.id) {
             this.handle_reaction(event);
         }
     };
@@ -111,12 +135,20 @@ export function SlackBot(events, token) {
         this.update_user_list();
 
         this.rtm.on("message", e => this._handle_message(e));
-        this.rtm.on("reaction_added", e => this.handle_reaction(e));
+        this.rtm.on("reaction_added", e => this._handle_reaction(e));
 
         (async () => {
             const { self, team } = await this.rtm.start();
+            
+            this.id = self.id;
+            this.name = self.name;
+
             this.handle_ready();
         })();
+    };
+
+    this.stop = function () {
+        this.rtm.disconnect();
     };
 }
 
