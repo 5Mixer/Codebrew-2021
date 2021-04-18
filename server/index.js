@@ -23,7 +23,8 @@ mongoose.connect(process.env.MONGODB_URL || "mongodb://localhost/mongodblock", {
 
 app.post("/api/createBot", (req, res) => {
   // array contains new bot objects created by the function
-  // TODO: manage these
+  // TODO: manage these | Get current users tokens and pass into this function
+  req.body.user = req.user;
   new_bots = handle_bot_upload(req.body);
 
   res.status(200).end();

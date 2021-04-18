@@ -41,7 +41,6 @@ userRouter.post(
     console.log(createdUser);
     res.send({
       _id: createdUser._id,
-      name: createdUser.name,
       email: createdUser.email,
       token: generateToken(createdUser),
     });
@@ -52,7 +51,7 @@ userRouter.post(
   "/saveTokens",
   isAuth,
   expressAsyncHandler(async (req, res) => {
-    const updatedUser = await User.update(
+    const updatedUser = await User.updateOne(
       { _id: req.user._id },
       {
         dicordToken: req.body.input.discordToken,

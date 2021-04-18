@@ -62,6 +62,7 @@ export default {
         slackToken: "",
         discordToken: "",
       },
+      response: {},
       isAuth: true,
     };
   },
@@ -70,8 +71,8 @@ export default {
       this.$emit("close");
     },
     saveTokens() {
-      let userInfo = localStorage.getItem("userInfo");
-      console.log(userInfo);
+      let userInfo = JSON.parse(localStorage.getItem("userInfo"));
+      console.log(userInfo.token);
       if (userInfo.token) {
         axios
           .post(

@@ -1,8 +1,10 @@
 <template>
   <div class="header">
     <a href="/" class="logo">Bot blockly</a>
+    <a v-if="isLoggedIn"> {{`Welcome ${this.userInfo.email}`}} </a>
     <div class="header-right">
-      <button id="show-modal" @click="showLoginModal">Login</button>
+      <button v-if="isLoggedIn" @click="handleLogout">Logout</button>
+      <button v-else id ="show-modal" @click="showLoginModal">Login</button>
       <!-- use the modal component -->
       <LoginModal v-show="isLoginModalVisible" @close="closeLoginModal" />
       <button id="show-modal" @click="showTokenModal">Edit Bot Tokens</button>
@@ -17,8 +19,12 @@
 import LoginModal from "./LoginModalComponent.vue";
 import TokenModal from "./TokenModalComponent.vue";
 
+
 export default {
   name: "HeaderComponent",
+  computed : {
+      isLoggedIn : function(){ return  this.userInfo != null}
+    },
   components: {
     LoginModal,
     TokenModal,
@@ -27,6 +33,7 @@ export default {
     return {
       isLoginModalVisible: false,
       isTokenModalVisible: false,
+      userInfo: JSON.parse(localStorage.getItem("userInfo"))
     };
   },
   methods: {
@@ -42,6 +49,10 @@ export default {
     closeTokenModal() {
       this.isTokenModalVisible = false;
     },
+    handleLogout() {
+        localStorage.removeItem("userInfo");
+        this.userInfo = {};
+    }
   },
 };
 </script>

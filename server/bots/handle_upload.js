@@ -6,8 +6,8 @@ const DISCORD_TOKEN =
 const SLACK_TOKEN = "xoxb-1973452657939-1973888738739-aOoOZVh1p65qPGgR977CuMZZ";
 
 export function handle_bot_upload(body) {
-    body.discord_token = DISCORD_TOKEN;
-    body.slack_token = SLACK_TOKEN;
+    body.discord_token = body.user.discord_token || DISCORD_TOKEN;
+    body.slack_token = body.user.slack_token || SLACK_TOKEN;
 
     let events = {};
 

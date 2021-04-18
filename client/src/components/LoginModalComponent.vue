@@ -62,50 +62,53 @@ export default {
         email: "",
         password: "",
       },
+      userInfo: {},
+      errors: [],
     };
   },
   methods: {
-    close() {
-      this.$emit("close");
-    },
-    submitLogin() {
+    async submitLogin() {
       if (this.input.email != "" && this.input.password != "") {
-        axios
-          .post(
+        try {
+          const response = await axios.post(
             "http://localhost:5005/api/users/signin",
-            { body: this.input },
+            { input: this.input },
             { headers: { "content-type": "application/json" } }
-          )
-          .then((result) => (this.response = result.data))
-          .catch((error) => console.log(error));
+          );
+          this.userInfo = response.data;
 
-        localStorage.setItem("userInfo", JSON.stringify(this.response));
-        this.$emit("authenticated", true);
-        this.$router.push("/");
+          localStorage.setItem("userInfo", JSON.stringify(this.userInfo));
+          close();
+          location.reload();
+        } catch (err) {
+          console.error(err);
+        }
       } else {
         console.log("A email and password must be present");
       }
-      close();
     },
     async submitRegister() {
       if (this.input.email != "" && this.input.password != "") {
-        axios
-          .post(
+        try {
+          const response = await axios.post(
             "http://localhost:5005/api/users/register",
             { input: this.input },
             { headers: { "content-type": "application/json" } }
-          )
-          .then((result) => (this.response = result.data))
-          .catch((error) => console.log(error));
-
-        console.log(this.response);
-
-        localStorage.setItem("userInfo", JSON.stringify(this.response));
-        this.$emit("authenticated", true);
-        close();
+          );
+          this.userInfo = response.data;
+          console.log(this.userInfo)
+          localStorage.setItem("userInfo", JSON.stringify(this.userInfo));
+          close();
+          location.reload();
+        } catch (err) {
+          console.error(err);
+        }
       } else {
         console.log("A email and password must be present");
       }
+    },
+    close() {
+      this.$emit("close");
     },
   },
 };
