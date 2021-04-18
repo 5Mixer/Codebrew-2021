@@ -14,5 +14,5 @@ Blockly.Blocks['on_react'] = {
 
 Blockly.JavaScript['on_react'] = function(block) {
 	var handler = Blockly.JavaScript.statementToCode(block, 'on_react_handler',  Blockly.JavaScript.ORDER_FUNCTION_CALL);
-	return 'events.onreact = (msg, emoji, reacter) => {{async () => {\n' + handler + '>)()}\n';
+	return 'events.onreact = (msg, emoji, reacter) => {(async () => {\n' + handler + '})();};\n';
 };
