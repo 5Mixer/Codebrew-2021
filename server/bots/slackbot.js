@@ -1,7 +1,9 @@
 import { WebClient } from "@slack/web-api";
 import { RTMClient } from "@slack/rtm-api";
 import emojiDictionary from "emoji-dictionary";
-import { Bot, User, Channel, ReactedMessage, Message } from "./bot.js";
+import {
+    Bot, User, Channel, ReactedMessage, Message, NewUserMessage
+} from "./bot.js";
 
 export function SlackBot(events, token) {
     Bot.call(this, events, token, "Slack");
@@ -26,8 +28,6 @@ export function SlackBot(events, token) {
                 if (!/^[a-z0-9_]*$/.test(emoji)) {
                     emoji = emojiDictionary.getName(emoji) || emoji;
                 }
-
-                console.log(emoji);
 
                 await this.client.reactions.add({
                     name: emoji,
@@ -65,25 +65,25 @@ export function SlackBot(events, token) {
         })();
     };
 
+    this.get_user_name_from_id = function (user_id) {
+        let match = this.users.filter(u => u.id === user_id);
+        if (match.length === 0) {
+            this.update_user_list()
+            return "";
+        }
+        else {
+            return match[0].name; 
+        }
+    };
+
     this.get_content = function (event) {
         return event.text;
     };
 
     this.get_user = function (event) {
-        let user_name;
-        
-        let match = this.users.filter(u => u.id === event.user);
-        if (match.length === 0) {
-            this.update_user_list()
-            user_name = "";
-        }
-        else {
-            user_name = match[0].name; 
-        }
-
         return new User(
             event.user,
-            user_name,
+            this.get_user_name_from_id(event.user),
             c => this.send_message_to_channel(String(c), event.user)
         );
     };
@@ -124,6 +124,21 @@ export function SlackBot(events, token) {
         );
     };
 
+    this.get_new_user_message = function (event) {
+        return new NewUserMessage(
+            new Message(
+                "",
+                new User(
+                    event.inviter,
+                    this.get_user_name_from_id(event.inviter),
+                    c => this.send_message_to_channel(String(c), event.inviter)
+                ),
+                this.get_channel(event)
+            ),
+            this.get_user(event)
+        );
+    };
+
     this._handle_message = function (event) {
         if (event.bot_profile === undefined) {
             this.handle_message(event);
@@ -145,6 +160,7 @@ export function SlackBot(events, token) {
 
         this.rtm.on("message", e => this._handle_message(e));
         this.rtm.on("reaction_added", e => this._handle_reaction(e));
+        this.rtm.on("member_joined_channel", e => this.handle_new_user(e));
 
         (async () => {
             const { self, team } = await this.rtm.start();

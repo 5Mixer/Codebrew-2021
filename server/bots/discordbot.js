@@ -1,9 +1,41 @@
 import Discord from "discord.js";
 import emojiDictionary from "emoji-dictionary";
-import {Bot, User, Channel, ReactedMessage} from "./bot.js";
+import Long from "long";
+import {
+    Bot, User, Channel, ReactedMessage, NewUserMessage, Message
+} from "./bot.js";
 
 export function DiscordBot(events, token) {
     Bot.call(this, events, token, "Discord");
+
+    this.get_default_channel = function (guild) {
+        let channel;
+        if (guild.channels.cache.has(guild.id)) {
+            channel = guild.channels.cache.get(guild.id);
+        }
+        else {
+            channel = guild.channels.cache.find(c => c.name === "general");
+            if (!channel) {
+                channel = guild.channels.cache
+                .filter(c => c.type === "text" &&
+                    c.permissionsFor(guild.client.user).has("SEND_MESSAGES"))
+                .sort((a, b) => a.position - b.position || 
+                    Long.fromString(a.id).sub(Long.fromString(b.id)).toNumber())
+                .first();    
+            }
+        }
+
+        return new Channel(
+            channel.id,
+            channel.name,
+            c => {
+                try {
+                    channel.send(String(c));
+                }
+                catch {}
+            }
+        );
+    };
 
     this.get_content = function (event) {
         return event.content || "";
@@ -20,7 +52,12 @@ export function DiscordBot(events, token) {
         return new User(
             user.id || "",
             user.username || "",
-            c => user.send(String(c))
+            c => {
+                try {
+                    user.send(String(c))
+                }
+                catch {}
+            }
         );
     };
 
@@ -28,7 +65,12 @@ export function DiscordBot(events, token) {
         return new Channel(
             event.channel.id,
             event.channel.name || "",
-            event.channel ? c => event.channel.send(String(c)) : _ => {}
+            event.channel ? c => {
+                try {
+                    event.channel.send(String(c))
+                }
+                catch {}
+            } : _ => {}
         );
     };
 
@@ -53,11 +95,28 @@ export function DiscordBot(events, token) {
         );
     };
 
+    this.get_new_user_message = function (event) {
+        return new NewUserMessage(
+            new Message(
+                "",
+                this.get_user(event),
+                this.get_default_channel(event.guild)
+            ),
+            this.get_user(event)
+        );
+    };
+
     this._handle_reaction = function (message_reaction, user) {
         if (!user.bot) {
             let event = message_reaction;
             event.user = user;
             this.handle_reaction(event);    
+        }
+    };
+
+    this._handle_new_user = function (member) {
+        if (!member.bot) {
+            this._handle_new_user(member);
         }
     };
 
@@ -91,11 +150,14 @@ export function DiscordBot(events, token) {
             "messageReactionAdd",
             (mr, u) => this._handle_reaction(mr, u)
         );
-        // client.on(
-        //     "messageReactionRemove",
-        //     (mr, u) => this._handle_reaction(mr, u)
-        // );
-        // client.on("channelCreate", (c) => console.log("Channel created."));
+        client.on(
+            "guildMemberAdd",
+            m => this._handle_new_user(m)
+        );
+
+        // other interesting events
+        // "messageReactionRemove"(mr, u)
+        // "channelCreate"(c)
 
         client.login(this.token);
     };
