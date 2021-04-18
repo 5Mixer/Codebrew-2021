@@ -4,7 +4,7 @@
       <div class="modal">
         <header class="modal-header">
           <slot name="header">
-            About us
+            About The Application
           </slot>
           <button type="button" class="btn-close" @click="close">
             X
@@ -15,10 +15,11 @@
           <slot name="body">
             <form class="form">
               <div>
-                <label for="slackToken">YEEE BOOOOIII</label>
-              </div>
-              <div>
-                <label for="discordToken">YEEE BOOOOIII</label>
+                <label for="discordToken">Blot is a new visual programming environment that we have developed on top of the blockly programming environment. 
+                    It combines the simplicity of visual programming tools, which have historically only been used to make games, with the APIs of slack, discord, 
+                    and any other public facing JSON API. This completely advances the possibilities of visual programming. Now, external services can be interfaced 
+                    with and programmed by non-programmers. Whilst we’ve established integration with discord, slack and have created a JSON HTTP request block, many 
+                    possibilities exist for combining services in a manner that is more intelligent than ‘if this, then that’.</label>
               </div>
             </form>
           </slot>
