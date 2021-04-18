@@ -8,7 +8,8 @@
       <button id="show-modal" @click="showTokenModal">Edit Bot Tokens</button>
       <!-- use the modal component -->
       <TokenModal v-show="isTokenModalVisible" @close="closeTokenModal" />
-      <button>About</button>
+      <button id="show-modal" @click="showAboutModal">About</button>
+      <About v-show="isAboutModalVisible" @close="closeAboutModal" />
     </div>
   </div>
 </template>
@@ -16,17 +17,20 @@
 <script>
 import LoginModal from "./LoginModalComponent.vue";
 import TokenModal from "./TokenModalComponent.vue";
+import About from "./About.vue";
 
 export default {
   name: "HeaderComponent",
   components: {
     LoginModal,
     TokenModal,
+    About,
   },
   data() {
     return {
       isLoginModalVisible: false,
       isTokenModalVisible: false,
+      isAboutModalVisible: false,
     };
   },
   methods: {
@@ -42,6 +46,12 @@ export default {
     closeTokenModal() {
       this.isTokenModalVisible = false;
     },
+    showAboutModal() {
+      this.isAboutModalVisible = true;
+    },
+    closeAboutModal() {
+      this.isAboutModalVisible = false;
+    }
   },
 };
 </script>

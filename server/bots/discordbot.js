@@ -1,4 +1,5 @@
 import Discord from "discord.js";
+import emojiDictionary from "emoji-dictionary";
 import {Bot, User, Channel, ReactedMessage} from "./bot.js";
 
 export function DiscordBot(events, token) {
@@ -32,7 +33,16 @@ export function DiscordBot(events, token) {
     };
 
     this.get_react = function (event) {
-        return event ? e => event.react(e) : _ => {};
+        return event ? e => {
+            try {
+                if (/^[a-z0-9_]*$/.test(e)) {
+                    e = emojiDictionary.getUnicode(e);
+                }
+
+                event.react(e);
+            }
+            catch {}
+        } : _ => {};
     };
 
     this.get_reacted_message = function (event) {

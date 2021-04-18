@@ -1,5 +1,6 @@
 import { WebClient } from "@slack/web-api";
 import { RTMClient } from "@slack/rtm-api";
+import emojiDictionary from "emoji-dictionary";
 import { Bot, User, Channel, ReactedMessage, Message } from "./bot.js";
 
 export function SlackBot(events, token) {
@@ -22,13 +23,21 @@ export function SlackBot(events, token) {
     this.add_reaction_to_message = function (emoji, channel, timestamp) {
         (async () => {
             try {
+                if (!/^[a-z0-9_]*$/.test(emoji)) {
+                    emoji = emojiDictionary.getName(emoji) || emoji;
+                }
+
+                console.log(emoji);
+
                 await this.client.reactions.add({
                     name: emoji,
                     channel: channel,
                     timestamp: timestamp
                 });
             }
-            catch {}
+            catch (erorr) {
+                console.log(`Error reacting to slack message: ${erorr}`);
+            }
         })();
     };
 

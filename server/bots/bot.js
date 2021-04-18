@@ -1,6 +1,6 @@
 // Supported events:
 //  - onmessage(message)
-//  - onreaction(reaction)
+//  - onreact(message, emoji, reacter)
 //  - onready(info)
 
 // TODO
@@ -122,8 +122,9 @@ export function Bot(events, token, type="Abstract") {
     };
 
     this.handle_reaction = function (event) {
-        if (this.events.onreaction) {
-            this.events.onreaction(this.get_reacted_message(event));
+        if (this.events.onreact) {
+            let reacted = this.get_reacted_message(event);
+            this.events.onreact(reacted, reacted.emoji, reacted.reacter);
         }
     };
 
