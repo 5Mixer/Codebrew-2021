@@ -6,8 +6,8 @@ const DISCORD_TOKEN =
 const SLACK_TOKEN = "xoxb-1973452657939-1973888738739-aOoOZVh1p65qPGgR977CuMZZ";
 
 export function handle_bot_upload(body) {
-    body.discord_token = DISCORD_TOKEN;
-    body.slack_token = SLACK_TOKEN;
+    body.discord_token = body.discord_token || DISCORD_TOKEN;
+    body.slack_token = body.slack_token || SLACK_TOKEN;
 
     let events = {};
 
@@ -15,6 +15,7 @@ export function handle_bot_upload(body) {
         eval(decodeURI(body.js));
     }
     catch (error) {
+        console.log(`Error when evaling blockly code: ${error}`);
         return [];
     }
 
@@ -22,7 +23,7 @@ export function handle_bot_upload(body) {
 
     try {
         if (body.discord_token) {
-            const discord_bot = new DiscordBot(events, DISCORD_TOKEN);
+            const discord_bot = new DiscordBot(events, body.discord_token);
             discord_bot.start();
             new_bots.push(discord_bot);
         }
@@ -33,7 +34,7 @@ export function handle_bot_upload(body) {
 
     try {
         if (body.slack_token) {
-            const slack_bot = new SlackBot(events, SLACK_TOKEN);
+            const slack_bot = new SlackBot(events, body.slack_token);
             slack_bot.start();
             new_bots.push(slack_bot);
         }    
@@ -42,5 +43,6 @@ export function handle_bot_upload(body) {
         console.log(`Error when creating Slack bot: ${error}`);
     }
 
+    console.log(`Created ${new_bots.length} new bots.`);
     return new_bots;
 }
