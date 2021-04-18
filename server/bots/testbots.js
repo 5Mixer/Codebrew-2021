@@ -13,7 +13,8 @@ let events = {
         msg.channel.send(msg.content);
     },
     onready: i => console.log(`Logged in as ${i}!`),
-    onreaction: rm => rm.react(rm.emoji)
+    onreact: rm => rm.react(rm.emoji),
+    onnewuser: msg => {msg.newuser.send("HI!")}
 };
 
 const discord = new DiscordBot(events, DISCORD_TOKEN);

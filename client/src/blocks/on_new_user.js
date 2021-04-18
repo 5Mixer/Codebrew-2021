@@ -14,5 +14,5 @@ Blockly.Blocks['on_new_user'] = {
 
 Blockly.JavaScript['on_new_user'] = function(block) {
 	var handler = Blockly.JavaScript.statementToCode(block, 'on_new_user_handler',  Blockly.JavaScript.ORDER_FUNCTION_CALL);
-	return 'events.onnewuser = (newuser) => {\n' + handler + '}\n';
+	return 'events.onmessage = (newuser) => {(async () => {\n' + handler + '})();}\n';
 };

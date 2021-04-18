@@ -11,5 +11,5 @@ Blockly.Blocks['content_field'] = {
 };
 
 Blockly.JavaScript['content_field'] = function() {
-	return ['content', Blockly.JavaScript.ORDER_ATOMIC];
+	return ['msg.content', Blockly.JavaScript.ORDER_ATOMIC];
 };

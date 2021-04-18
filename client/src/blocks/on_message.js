@@ -15,5 +15,5 @@ Blockly.Blocks['on_message'] = {
 
 Blockly.JavaScript['on_message'] = function(block) {
 	var handler = Blockly.JavaScript.statementToCode(block, 'on_message_handler',  Blockly.JavaScript.ORDER_FUNCTION_CALL);
-	return 'events.onmessage = (msg) => {\n' + handler + '}\n';
+	return 'events.onmessage = (msg) => {(async () => {\n' + handler + '})();}\n';
 };

@@ -1,10 +1,7 @@
 // Supported events:
 //  - onmessage(message)
-//  - onreaction(reaction)
+//  - onreact(message, emoji, reacter)
 //  - onready(info)
-
-// TODO
-// - react to message block
 
 export function User(id="", name="", send=null) {
     this.id = id;
@@ -18,10 +15,10 @@ export function User(id="", name="", send=null) {
     return this;
 }
 
-export function Channel(id, name, send) {
+export function Channel(id="", name="", send=null) {
     this.id = id;
     this.name = name;
-    this.send = send;
+    this.send = send || (_ => {});
 
     this.toString = function () {
         return this.name;
@@ -30,11 +27,11 @@ export function Channel(id, name, send) {
     return this;
 }
 
-export function Message(content, author, channel, react) {
+export function Message(content="", author=null, channel=null, react=null) {
     this.content = content;
-    this.author = author;
-    this.channel = channel;
-    this.react = react;
+    this.author = author || new User();
+    this.channel = channel || new Channel();
+    this.react = react || (_ => {});
 
     return this;
 }
@@ -50,19 +47,30 @@ export function ReactedMessage(message, emoji, reacter) {
         );
     }
     else {
-        Message.call(
-            this,
-            "",
-            new User("", "", _ => {}),
-            new Channel("", "", _ => {}),
-            _ => {}
-        );
+        Message.call(this);
     }
 
     this.emoji = emoji;
     this.reacter = reacter;
 
     return this;
+}
+
+export function NewUserMessage(message, newuser) {
+    if (message !== null) {
+        Message.call(
+            this,
+            message.content,
+            message.author,
+            message.channel,
+            message.react
+        );
+    }
+    else {
+        Message.call(this);
+    }
+
+    this.newuser = newuser;
 }
 
 export function Bot(events, token, type="Abstract") {
@@ -104,6 +112,14 @@ export function Bot(events, token, type="Abstract") {
         );
     };
 
+    this.get_new_user_message = function (event) {
+        // Get a dummy message with new user information.
+
+        throw new TypeError(
+            "Abstract Bot get_new_user_message method not implemented."
+        );
+    }
+
     this.get_message = function (event) {
         // Get a Message object from an event received by this bot.
 
@@ -122,8 +138,15 @@ export function Bot(events, token, type="Abstract") {
     };
 
     this.handle_reaction = function (event) {
-        if (this.events.onreaction) {
-            this.events.onreaction(this.get_reacted_message(event));
+        if (this.events.onreact) {
+            let reacted = this.get_reacted_message(event);
+            this.events.onreact(reacted, reacted.emoji, reacted.reacter);
+        }
+    };
+
+    this.handle_new_user = function (event) {
+        if (this.events.onnewuser) {
+            this.events.onnewuser(this.get_new_user_message(event));
         }
     };
 
