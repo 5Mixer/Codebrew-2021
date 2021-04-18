@@ -1,8 +1,9 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-  
+  <div id="app">    
+    
     <BlocklyComponent id="blockly" :options="options" ref="foo"></BlocklyComponent>
+    <HeaderComponent></HeaderComponent>
+    
     <p id="code">
       <button v-on:click="showCode()">Show JavaScript</button>
       <pre v-html="code"></pre>
@@ -11,7 +12,7 @@
 </template>
 
 <script>
-
+import HeaderComponent from './components/HeaderComponent.vue'
 import BlocklyComponent from './components/BlocklyComponent.vue'
 import './blocks/on_message';
 import './blocks/on_react';
@@ -46,7 +47,8 @@ async function postData(url = '', data) {
 export default {
   name: 'app',
   components: {
-    BlocklyComponent
+    BlocklyComponent,
+    HeaderComponent
   },
   data(){
     return {
@@ -79,6 +81,10 @@ export default {
 </script>
 
 <style>
+body {
+  height: 100vh;
+  margin: 0;
+}
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -86,16 +92,12 @@ export default {
   color: #2c3e50;
 }
 
-html, body {
-  margin: 0;
-}
-
 #code {
   position: absolute;
   right: 0;
   bottom: 0;
   width: 20%;
-  height: 100%;
+  height: 95%;
   margin: 0;
   background-color: beige;
 }
@@ -104,6 +106,15 @@ html, body {
   left: 0;
   bottom: 0;
   width: 80%;
-  height: 100%;
+  height: 95%;
 }
+input {
+  padding: 0.5rem;
+  border-radius: 0.2rem;
+  border: 0.1rem #a4a4a4 solid;
+  font-size: 1rem;
+  font-family: Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  }
 </style>

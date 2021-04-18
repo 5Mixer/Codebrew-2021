@@ -10,11 +10,10 @@ const SLACK_TOKEN = "xoxb-1973452657939-1973888738739-aOoOZVh1p65qPGgR977CuMZZ";
 
 let events = {
     onmessage: (msg) => {
-        console.log(msg.content);
         msg.channel.send(msg.content);
     },
     onready: i => console.log(`Logged in as ${i}!`),
-    onreaction: e => console.log(e)
+    onreaction: rm => console.log(rm.emoji)
 };
 
 const discord = new DiscordBot(events, DISCORD_TOKEN);

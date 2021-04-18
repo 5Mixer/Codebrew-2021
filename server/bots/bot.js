@@ -3,18 +3,26 @@
 //  - onreaction(reaction)
 //  - onready(info)
 
-export function User(id, send) {
+export function User(id, name, send) {
     this.id = id;
+    this.name = name;
     this.send = send;
+
+    this.toString = function () {
+        return this.name;
+    };
 
     return this;
 }
 
-export function Channel(id, send) {
-    // TODO add channel name, tostring method
-
+export function Channel(id, name, send) {
     this.id = id;
+    this.name = name;
     this.send = send;
+
+    this.toString = function () {
+        return this.name;
+    };
     
     return this;
 }
@@ -23,15 +31,25 @@ export function Message(content, author, channel) {
     this.content = content;
     this.author = author;
     this.channel = channel;
-    
+
     return this;
 }
 
-export function Reaction(message, emoji, user, count) {
-    this.message = message;
+export function ReactedMessage(message, emoji, reacter) {
+    if (message !== null) {
+        Message.call(this, message.content, message.author, message.channel);
+    }
+    else {
+        Message.call(
+            this,
+            "",
+            new User("", "", _ => {}),
+            new Channel("", "", _ => {})
+        );
+    }
+
     this.emoji = emoji;
-    this.user = user;
-    this.count = count;
+    this.reacter = reacter;
 
     return this;
 }
@@ -59,6 +77,14 @@ export function Bot(events, token, type="Abstract") {
         throw new TypeError("Abstract Bot get_channel method not implemented.");
     };
 
+    this.get_reacted_message = function (event) {
+        // Get the message that was reacted to in a reaction event.
+
+        throw new TypeError(
+            "Abstract Bot get_reacted_message method not implemented."
+        );
+    };
+
     this.get_message = function (event) {
         // Get a Message object from an event received by this bot.
 
@@ -69,12 +95,6 @@ export function Bot(events, token, type="Abstract") {
         );
     };
 
-    this.get_reaction = function (event) {
-        // Get a Reaction object from an event received by this bot.
-
-        return new Reaction(new Message(event), null, null, null);
-    };
-
     this.handle_message = function (event) {
         if (this.events.onmessage) {
             this.events.onmessage(this.get_message(event));
@@ -83,7 +103,7 @@ export function Bot(events, token, type="Abstract") {
 
     this.handle_reaction = function (event) {
         if (this.events.onreaction) {
-            this.events.onreaction(event);
+            this.events.onreaction(this.get_reacted_message(event));
         }
     };
 

@@ -1,43 +1,63 @@
 import Discord from "discord.js";
-import {Bot, User, Channel} from "./bot.js";
+import {Bot, User, Channel, ReactedMessage} from "./bot.js";
 
 export function DiscordBot(events, token) {
     Bot.call(this, events, token, "Discord");
 
     this.get_content = function (event) {
-        return event.content;
+        return event.content || "";
     };
 
     this.get_user = function (event) {
+        let user = event.author ? event.author : event.user ? event.user :
+            {
+                id: "",
+                username: "",
+                send: _ => {}
+            };
+
         return new User(
-            event.author.id,
-            c => event.author.send(c)
+            user.id || "",
+            user.username || "",
+            c => user.send(String(c))
         );
     };
 
     this.get_channel = function (event) {
         return new Channel(
             event.channel.id,
-            c => event.channel.send(c)
+            event.channel.name || "",
+            event.channel ? c => event.channel.send(String(c)) : _ => {}
+        );
+    };
+
+    this.get_reacted_message = function (event) {
+        return new ReactedMessage(
+            event.message ? this.get_message(event.message) : null,
+            event.emoji.toString() || "",
+            this.get_user(event)
         );
     };
 
     this._handle_reaction = function (message_reaction, user) {
-        console.log(message_reaction, user);
+        if (!user.bot) {
+            let event = message_reaction;
+            event.user = user;
+            this.handle_reaction(event);    
+        }
     };
 
     this.start = function () {
-        let client;
-        if (events.onreaction) {
-            client = new Discord.Client({
-                ws: {
-                    intents: new Discord.Intents(Discord.Intents.ALL)
-                }
-            });
-        }
-        else {
-            client = new Discord.Client();
-        }
+        let client = new Discord.Client({
+            ws: { intents: new Discord.Intents(Discord.Intents.ALL) },
+            partials: [
+                "USER",
+                "MESSAGE",
+                "CHANNEL",
+                "REACTION",
+                "GUILD_MEMBER"
+            ]
+        });
 
         client.on("ready", () => this.handle_ready());
         client.on(
@@ -56,7 +76,7 @@ export function DiscordBot(events, token) {
             "messageReactionRemove",
             (mr, u) => this._handle_reaction(mr, u)
         );
-        client.on("channelCreate", (c) => console.log("yep", c));
+        // client.on("channelCreate", (c) => console.log("Channel created."));
 
         client.login(this.token);
     };
